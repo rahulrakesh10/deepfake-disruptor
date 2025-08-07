@@ -41,12 +41,12 @@ export const LiveFeed = () => {
         const platforms = ['Twitter/X', 'TikTok', 'Instagram', 'YouTube', 'Facebook', 'Telegram'];
         const authors = ['@newsaccount', '@politicaltalk', '@breakingnews', '@viral_content', '@celebrity_news'];
         const contents = [
-          'BREAKING: New footage emerges from recent political event...',
-          'Celebrity spotted in compromising situation - watch full video',
-          'Government official makes shocking statement about economy',
-          'VIRAL: Amazing rescue caught on camera goes worldwide',
-          'EXCLUSIVE: Leaked audio reveals shocking conversation',
-          'URGENT: Emergency services respond to developing situation'
+          '⚠️ SIMULATED: New footage emerges from recent political event...',
+          '🤖 DEMO: Celebrity spotted in compromising situation - watch full video',
+          '⚠️ FAKE DATA: Government official makes shocking statement about economy',
+          '🤖 SIMULATED: Amazing rescue caught on camera goes worldwide',
+          '⚠️ DEMO: Leaked audio reveals shocking conversation',
+          '🤖 FAKE DATA: Emergency services respond to developing situation'
         ];
 
         const realityScore = Math.floor(Math.random() * 80) + 20;
@@ -114,10 +114,10 @@ export const LiveFeed = () => {
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Radio className={`h-5 w-5 ${streamStatus === 'connected' ? 'text-success animate-pulse' : 'text-destructive'}`} />
-            Live Social Stream
+            Live Social Stream (DEMO)
           </div>
           <Badge variant="outline" className={streamStatus === 'connected' ? 'bg-success/20' : 'bg-destructive/20'}>
-            {streamStatus.toUpperCase()}
+            {streamStatus === 'connected' ? 'SIMULATED' : 'OFFLINE'}
           </Badge>
         </CardTitle>
       </CardHeader>

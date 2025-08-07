@@ -35,6 +35,8 @@ export const Dashboard = () => {
   const [globalRealityScore, setGlobalRealityScore] = useState(73);
   const [activeThreats, setActiveThreats] = useState(156);
   const [processedToday, setProcessedToday] = useState(47230891);
+  const [emergencyMode, setEmergencyMode] = useState(false);
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
   // Simulate real-time data updates
   useEffect(() => {
@@ -98,7 +100,34 @@ export const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen p-6 space-y-6">
+    <div className={`min-h-screen p-6 space-y-6 transition-all duration-300 ${emergencyMode ? 'bg-destructive/5' : ''}`}>
+      {/* Demo Notice */}
+      <div className="bg-warning/10 border border-warning/20 rounded-lg p-3 mb-4">
+        <p className="text-sm text-warning-foreground">
+          🔬 <strong>DEMO MODE:</strong> This is a prototype interface. Live feeds are simulated. 
+          Real implementation would connect to actual social media APIs and AI detection models.
+        </p>
+      </div>
+
+      {/* Emergency Alert */}
+      {emergencyMode && (
+        <div className="bg-destructive/20 border border-destructive cyber-glow-danger rounded-lg p-4 animate-pulse-glow">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-destructive" />
+            <h3 className="font-bold text-destructive">EMERGENCY MODE ACTIVATED</h3>
+          </div>
+          <p className="text-sm mt-2">All detection algorithms running at maximum sensitivity. Authorities notified.</p>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="mt-2" 
+            onClick={() => setEmergencyMode(false)}
+          >
+            Deactivate Emergency Mode
+          </Button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -108,13 +137,20 @@ export const Dashboard = () => {
           <p className="text-muted-foreground">Real-Time Multimodal Disinformation Combat System</p>
         </div>
         <div className="flex gap-4">
-          <Button variant="outline" className="cyber-border hover:cyber-glow">
+          <Button 
+            variant="outline" 
+            className="cyber-border hover:cyber-glow"
+            onClick={() => setShowAnalysisModal(true)}
+          >
             <Upload className="h-4 w-4 mr-2" />
             Analyze Content
           </Button>
-          <Button className="bg-gradient-primary hover:shadow-glow-primary">
+          <Button 
+            className={`transition-all ${emergencyMode ? 'bg-destructive hover:bg-destructive/90 cyber-glow-danger' : 'bg-gradient-primary hover:shadow-glow-primary'}`}
+            onClick={() => setEmergencyMode(!emergencyMode)}
+          >
             <Shield className="h-4 w-4 mr-2" />
-            Emergency Mode
+            {emergencyMode ? 'Emergency Active' : 'Emergency Mode'}
           </Button>
         </div>
       </div>
@@ -184,7 +220,7 @@ export const Dashboard = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Activity className="h-5 w-5 text-primary animate-pulse" />
-                Live Threat Feed
+                Live Threat Feed (DEMO)
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 overflow-y-auto max-h-[320px]">
@@ -228,6 +264,42 @@ export const Dashboard = () => {
         <AnalysisPanel />
         <LiveFeed />
       </div>
+
+      {/* Analysis Modal */}
+      {showAnalysisModal && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-card cyber-border rounded-lg p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Quick Content Analysis</h3>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setShowAnalysisModal(false)}
+              >
+                ✕
+              </Button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Paste URL or Text</label>
+                <textarea 
+                  className="w-full p-3 bg-muted rounded-lg border cyber-border" 
+                  placeholder="Enter URL or paste suspicious content..."
+                  rows={4}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button className="flex-1" onClick={() => setShowAnalysisModal(false)}>
+                  Analyze Content
+                </Button>
+                <Button variant="outline" onClick={() => setShowAnalysisModal(false)}>
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
