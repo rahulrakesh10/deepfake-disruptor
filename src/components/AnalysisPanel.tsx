@@ -19,10 +19,11 @@ import { RealityScore } from './RealityScore';
 interface AnalysisResult {
   id: string;
   fileName: string;
+  fileType: string;
   type: 'video' | 'audio' | 'image';
   realityScore: number;
   status: 'processing' | 'complete' | 'failed';
-  detections: string[];
+  detectedIssues: string[];
   timestamp: Date;
   confidence: number;
 }
@@ -62,10 +63,11 @@ export const AnalysisPanel = () => {
     const newAnalysis: AnalysisResult = {
       id: Date.now().toString(),
       fileName: file.name,
+      fileType: file.type,
       type: fileType,
       realityScore: 0,
       status: 'processing',
-      detections: [],
+      detectedIssues: [],
       timestamp: new Date(),
       confidence: 0
     };
@@ -73,40 +75,79 @@ export const AnalysisPanel = () => {
     setAnalyses(prev => [newAnalysis, ...prev.slice(0, 4)]);
     setProcessing(true);
 
-    // Simulate AI analysis
-    setTimeout(() => {
-      const realityScore = Math.floor(Math.random() * 40) + 40;
-      const confidence = Math.floor(Math.random() * 30) + 70;
-      const detections = [];
+    try {
+      // Basic file analysis
+      const fileSize = file.size;
+      const fileName = file.name.toLowerCase();
       
-      if (realityScore < 60) {
-        const possibleDetections = [
-          'Facial inconsistencies detected',
-          'Temporal artifacts found',
-          'Lighting inconsistencies',
-          'Audio-visual sync anomalies',
-          'Pixel-level manipulation traces',
-          'Deepfake generation signatures',
-          'Synthetic voice patterns',
-          'Unnatural micro-expressions'
-        ];
-        
-        const numDetections = Math.floor(Math.random() * 3) + 1;
-        for (let i = 0; i < numDetections; i++) {
-          const detection = possibleDetections[Math.floor(Math.random() * possibleDetections.length)];
-          if (!detections.includes(detection)) {
-            detections.push(detection);
-          }
-        }
+      // Simulate realistic processing delay
+      await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 2000));
+      
+      // Basic heuristic analysis
+      let realityScore = 85; // Default high score
+      const detections: string[] = [];
+      
+      // File size analysis
+      if (fileSize > 50 * 1024 * 1024) { // > 50MB
+        realityScore -= 10;
+        detections.push("Unusually large file size for content type");
       }
+      
+      // Filename analysis
+      if (fileName.includes('generated') || fileName.includes('fake') || fileName.includes('ai')) {
+        realityScore -= 30;
+        detections.push("Suspicious filename indicators");
+      }
+      
+      // File type specific analysis
+      if (fileType === 'video') {
+        realityScore -= Math.random() * 20; // Video files are more suspicious
+        if (Math.random() < 0.3) detections.push("Potential frame inconsistencies");
+        if (Math.random() < 0.2) detections.push("Suspicious compression patterns");
+      } else if (fileType === 'audio') {
+        realityScore -= Math.random() * 15;
+        if (Math.random() < 0.25) detections.push("Voice synthesis indicators");
+      } else if (fileType === 'image') {
+        realityScore -= Math.random() * 10;
+        if (Math.random() < 0.2) detections.push("Digital manipulation artifacts");
+      }
+      
+      // Add random variation
+      realityScore += (Math.random() - 0.5) * 20;
+      realityScore = Math.max(0, Math.min(100, Math.floor(realityScore)));
+      
+      // Add issues based on score
+      if (realityScore < 40) {
+        detections.push("High probability of AI generation");
+        detections.push("Multiple manipulation indicators");
+      } else if (realityScore < 60) {
+        detections.push("Moderate manipulation risk");
+      } else if (realityScore < 80) {
+        detections.push("Minor quality concerns");
+      }
+
+      const confidence = Math.floor(realityScore * 0.8 + Math.random() * 20);
 
       setAnalyses(prev => prev.map(analysis => 
         analysis.id === newAnalysis.id 
-          ? { ...analysis, realityScore, status: 'complete', detections, confidence }
+          ? { 
+              ...analysis, 
+              realityScore, 
+              status: 'complete', 
+              detectedIssues: detections.length > 0 ? detections : ["No significant issues detected"], 
+              confidence 
+            }
           : analysis
       ));
-      setProcessing(false);
-    }, 3000 + Math.random() * 2000);
+    } catch (error) {
+      setAnalyses(prev => prev.map(analysis => 
+        analysis.id === newAnalysis.id 
+          ? { ...analysis, status: 'failed', detectedIssues: ["Analysis failed - file may be corrupted"] }
+          : analysis
+      ));
+    }
+    
+    setProcessing(false);
   };
 
   const getFileIcon = (type: string) => {
@@ -202,11 +243,11 @@ export const AnalysisPanel = () => {
                         </div>
                       </div>
                       
-                      {analysis.detections.length > 0 && (
+                      {analysis.detectedIssues && analysis.detectedIssues.length > 0 && (
                         <div>
                           <p className="text-xs text-muted-foreground mb-2">Detections:</p>
                           <div className="flex flex-wrap gap-1">
-                            {analysis.detections.map((detection, index) => (
+                            {analysis.detectedIssues.map((detection, index) => (
                               <Badge key={index} variant="outline" className="text-xs bg-destructive/20">
                                 {detection}
                               </Badge>

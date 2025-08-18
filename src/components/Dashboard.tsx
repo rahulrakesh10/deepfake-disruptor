@@ -19,6 +19,7 @@ import { ThreatMap } from './ThreatMap';
 import { AnalysisPanel } from './AnalysisPanel';
 import { LiveFeed } from './LiveFeed';
 import { RealityScore } from './RealityScore';
+import { EmergencyControls } from './EmergencyControls';
 
 interface ThreatAlert {
   id: string;
@@ -258,6 +259,12 @@ export const Dashboard = () => {
           </Card>
         </div>
       </div>
+
+      {/* Emergency Controls */}
+      <EmergencyControls 
+        isEmergencyMode={emergencyMode}
+        onToggleEmergency={() => setEmergencyMode(!emergencyMode)}
+      />
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
