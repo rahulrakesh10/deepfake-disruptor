@@ -201,22 +201,6 @@ Example dev deps:
 npm i -D vitest @testing-library/react @testing-library/jest-dom jsdom
 ```
 
----
-
-## 🧭 Coding Standards
-
-- **TypeScript everywhere** for component APIs and data models.
-- Maintain small, focused components. Push shared UI to `components/ui`.
-- Keep fetch logic in `hooks/` or `lib/` (not inside JSX when possible).
-- Run `npm run lint` before opening a PR.
-
----
-
-## 🔒 Ethics & Safety
-
-This project’s goal is to **detect** synthetic media and help users make informed decisions. Do not use it to target individuals, suppress legitimate content, or violate privacy. Always disclose limitations and potential false positives/negatives.
-
----
 
 
 - **Blank page / HMR issues:** Clear browser cache or delete `node_modules` and reinstall.
