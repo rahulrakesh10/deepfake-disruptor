@@ -218,23 +218,6 @@ This project’s goal is to **detect** synthetic media and help users make infor
 
 ---
 
-## 🤝 Contributing
-
-1. Fork the repo
-2. Create a feature branch: `git checkout -b feat/my-feature`
-3. Commit: `git commit -m "feat: add my feature"`
-4. Push: `git push origin feat/my-feature`
-5. Open a PR
-
----
-
-## 📄 License
-
-MIT — see `LICENSE` (or choose the license that fits your needs).
-
----
-
-## 🧰 Troubleshooting
 
 - **Blank page / HMR issues:** Clear browser cache or delete `node_modules` and reinstall.
 - **CORS / network failures:** Check `VITE_API_BASE` and your backend CORS policy.
